@@ -7,6 +7,11 @@
 in {
   home.packages = with pkgs; [discord discocss];
 
+  xdg.configFile."discord/settings.json".text = builtins.toJSON {
+    SKIP_HOST_UPDATE = true;
+    DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING = true;
+  };
+
   # from <https://github.com/Misterio77/nix-config/blob/main/home/misterio/features/desktop/common/discord.nix>
   xdg.configFile."discocss/custom.css".text = ''
     .theme-dark {

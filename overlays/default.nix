@@ -7,6 +7,7 @@
       system = final.system;
       config.allowUnfree = true;
     };
+
     # fixes an issue with drag and drop
     keepassxc = prev.keepassxc.overrideAttrs (_old: {
       postFixup = ''wrapProgram $out/bin/keepassxc --set QT_QPA_PLATFORM wayland'';

@@ -23,6 +23,7 @@
     libsForQt5.ark
     obsidian
     #plex-desktop
+    rustdesk
     qbittorrent
     vlc
     wl-clipboard

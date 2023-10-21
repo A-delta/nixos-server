@@ -28,6 +28,8 @@
   playerctld = "${pkgs.playerctl}/bin/playerctld";
   pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
   wofi = "${pkgs.wofi}/bin/wofi";
+  khal = "${pkgs.khal}/bin/khal";
+  python = "${pkgs.python3}/bin/python3";
 
   # Function to simplify making waybar outputs
   jsonOutput = name: {
@@ -74,7 +76,8 @@ in {
           ++ (lib.optionals config.wayland.windowManager.hyprland.enable [
             "hyprland/workspaces"
             "hyprland/submap"
-          ]);
+          ])
+          ++ ["custom/events"];
         modules-center = [
           "cpu"
           "custom/gpu"
@@ -332,6 +335,36 @@ in {
             "Stopped" = "󰓛";
           };
           on-click = "${playerctl} play-pause";
+        };
+        "custom/events" = {
+          format = "{}";
+          tooltip = true;
+          interval = 300;
+          format-icons.default = "";
+          exec = let
+            script =
+              pkgs.writeShellScript "script.py"
+              ''
+                import json
+                import subprocess
+                data = {}
+                output = subprocess.check_output("${khal} list now 7days --format \"{start-end-time-style} {title}\"", shell=True).decode("utf-8")
+                lines = output.split("\n")
+                new_lines = []
+                for line in lines:
+                    if len(line) and line[0].isalpha():
+                        line = "\n<b>"+line+"</b>"
+                    new_lines.append(line)
+                output = "\n".join(new_lines).strip()
+                if "Today" in output:
+                    data['text'] = " " + output.split('\n')[1]
+                else:
+                    data['text'] = ""
+                data['tooltip'] = output
+                print(json.dumps(data))
+              '';
+          in "${python} ${script}";
+          return-type = "json";
         };
       };
     };
