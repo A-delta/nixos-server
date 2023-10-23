@@ -1,3 +1,4 @@
+{pkgs,...}:
 {
   accounts.calendar = {
     basePath = ".local/share/calendars";
@@ -10,8 +11,9 @@
 
       vdirsyncer = {
         enable = true;
-        collections = null;
+        collections = ["from a" "from b"];
         metadata = ["color" "displayname"];
+	conflictResolution = "remote wins";
       };
 
       local = {
@@ -23,11 +25,18 @@
         type = "caldav";
         url = "https://domino.zdimension.fr/nextcloud/remote.php/dav";
         userName = "guekka";
-        passwordCommand = ["cat" "/home/edgar/secrets/nextcloud_pass"];
+        passwordCommand = ["${pkgs.bat}/bin/bat" "-p" "/home/edgar/secrets/nextcloud_pass"];
       };
     };
   };
 
   programs.vdirsyncer.enable = true;
-  programs.khal.enable = true;
+  programs.khal = {
+    enable = true;
+
+    locale = {
+      timeformat = "%H:%M";
+      dateformat = "%d/%m/%Y";
+    };
+  };
 }

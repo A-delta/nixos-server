@@ -19,6 +19,7 @@
     anytype
     calibre
     clight-gui
+    czkawka
     keepassxc
     libsForQt5.ark
     obsidian

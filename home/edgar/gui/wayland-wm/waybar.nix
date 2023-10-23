@@ -341,6 +341,7 @@ in {
           tooltip = true;
           interval = 300;
           format-icons.default = "";
+	  /*
           exec = let
             script =
               pkgs.writeShellScript "script.py"
@@ -364,6 +365,7 @@ in {
                 print(json.dumps(data))
               '';
           in "${python} ${script}";
+	  */
           return-type = "json";
         };
       };
